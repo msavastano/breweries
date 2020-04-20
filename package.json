@@ -1,0 +1,35 @@
+{
+  "name": "next-portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next -p 3001",
+    "build": "next build",
+    "export": "next export",
+    "serve:static": "npx serve out"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material-ui/core": "^4.9.9",
+    "@zeit/next-css": "^1.0.1",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.3.4",
+    "next-redux-wrapper": "^5.0.0",
+    "nprogress": "^0.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-number-format": "^4.4.1",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "reactstrap": "^8.4.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  }
+}
