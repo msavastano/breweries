@@ -9,7 +9,8 @@
     "build": "next build",
     "export": "next export",
     "serve:static": "npx serve out",
-    "build:export": "next build && next export"
+    "build:export": "next build && next export",
+    "start": "serve ./out"
   },
   "keywords": [],
   "author": "",
