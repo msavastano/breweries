@@ -1,32 +1,18 @@
 import React from 'react'
-import Link from 'next/link'
 import Layout from "../components/Layout";
 import { Component } from "react";
 import apiService from "../lib/apiService";
-import { Col, FormGroup, Label, Input, Card, CardTitle, CardText, CardColumns,
-  CardSubtitle } from "reactstrap";
-import NumberFormat from 'react-number-format'
+import { Col, FormGroup, Label, Input, Card, CardTitle, CardColumns,CardSubtitle } from "reactstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { connect } from 'react-redux';
-import { gobrew } from '../store/index.js';
-import { Provider } from 'react-redux';
-import { store } from '../store/index.js';
-import withRedux from "next-redux-wrapper";
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link,
-//   useRouteMatch
-// } from "react-router-dom";
-
+import Brewery from '../components/Brewery';
 export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
       state: "Rhode Island",
       type: "micro",
-      brewsList: []
+      brewsList: [],
+      br: {}
     };
   }
   static async getInitialProps({ req }) {
@@ -37,6 +23,7 @@ export class Index extends Component {
     const njData = await nj.data;
     const riData = await ri.data;
     const allData = nyData.concat(njData).concat(riData);
+    
 
     return { brews: allData };
   }
@@ -49,11 +36,11 @@ export class Index extends Component {
         this.setState({
           brewsList: this.state.brews.filter(el => {
             return el.state === this.state.state && el.brewery_type === this.state.type
-          })
+          }),
+          br: {}
         })
       }
     })
-    
   }
 
   handleTypeChange = (event) => {
@@ -64,9 +51,20 @@ export class Index extends Component {
         this.setState({
           brewsList: this.state.brews.filter(el => {
             return el.state === this.state.state && el.brewery_type === this.state.type
-          })
+          }),
+          br: {}
         })
       }
+    })
+  }
+
+  handleBrew = (e, data) => {
+    this.setState({
+      br: data
+    })
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
     })
   }
 
@@ -85,7 +83,6 @@ export class Index extends Component {
 
   render() {
     return (
-      <Provider store={store}>
       <Layout>
         <h1>Brews</h1>
         <div>
@@ -133,60 +130,35 @@ export class Index extends Component {
             </Col>
           </FormGroup>
         </div>
+    
+        {Object.keys(this.state.br).length > 0 &&
+          <div>
+            <Brewery info={this.state.br} />
+            <br />
+          </div>
+        }
 
         <CardColumns>
           {this.state.brewsList.map((value, index) => {
             return (
-              <Link
-                key={value.id}
-                href="/brewery/[id]" 
-                as={{
-                  pathname: `/brewery/${value.id}`,
-                }}
-                >
-              
-                {/* <Link
-                  key={value.id}
-                  to={{
-                    pathname: `/brewery/${value.id}`,
-                    state: {
-                      fromNotifications: true
-                    }
-                  }}
-                  > */}
-                    <a>
-                      <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
-                        <CardTitle>{value.name}</CardTitle>
-                        <CardSubtitle>{value.city}, {value.state}</CardSubtitle>
-                        <CardText><NumberFormat displayType="text" value={value.phone} format="(###) ###-####" mask="_" /></CardText>
-                      </Card>
-                    </a>
-                </Link>
+                
+                    <Card 
+                      key={value.id}
+                      body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+                      <CardTitle>{value.name}</CardTitle>
+                      <CardSubtitle>{value.city}, {value.state}</CardSubtitle>
+                      <button
+                        onClick={((e) => this.handleBrew(e, value))}
+                        value={value.name}
+                        >Info</button>
+                    </Card>
+                
             )
           })}
         </CardColumns>
-        {/* <p>{JSON.stringify(this.state.type)}</p>
-        <p>{JSON.stringify(this.state.state)}</p>
-        <p>{JSON.stringify(this.state.brewsList.length)}</p>
-        <p>{JSON.stringify(this.state.brewsList)}</p> */}
       </Layout>
-      </Provider>
     );
   }
 }
 
-
-const mapStateToProps = state => ({
-  brew: state.brewery
-});
-
-const mapDispatchToProps = {
-  gobrew
-};
-
-const makeStore = () => store
-
-const AppContainer = withRedux(makeStore)(Index);
-
 export default Index
-// export default AppContainer

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import Head from 'next/head'
 import Router from 'next/router'
 import Nprogress from 'nprogress'
@@ -13,10 +12,9 @@ Router.onRouteChangeError = () => Nprogress.done()
 export default ({ children, title }) => (
   <div className="root">
     <Head>
-      <title>Next Portfolio</title>
+      <title>Brews</title>
     </Head>
     <header>
-      <Link href="/"><a>Home</a></Link>
     </header>
     <h1>{title}</h1>
       {children}
@@ -37,7 +35,7 @@ export default ({ children, title }) => (
         justify-content:space-around;
         padding: 1em;
         font-size: 1.2 rem;
-        background: indigo;
+        background: #7e3740;
       }
 
       header a {
