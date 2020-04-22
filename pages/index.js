@@ -5,27 +5,29 @@ import apiService from "../lib/apiService";
 import { Col, FormGroup, Label, Input, Card, CardTitle, CardColumns,CardSubtitle } from "reactstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Brewery from '../components/Brewery';
+
+const states = process.env.STATES.split(' ').map((st) => {
+  return st.replace('-', ' ')
+})
 export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      state: "Rhode Island",
+      state: states[0],
       type: "micro",
       brewsList: [],
       br: {}
     };
   }
   static async getInitialProps({ req }) {
-    const ny = await apiService(`/breweries/search?query=florida`);
-    const nj = await apiService(`/breweries/search?query=new jersey`);
-    const ri = await apiService(`/breweries/search?query=rhode island`);
-    const nyData = await ny.data;
-    const njData = await nj.data;
-    const riData = await ri.data;
-    const allData = nyData.concat(njData).concat(riData);
+    let allData = await Promise.all(
+      states.map( async (el) => {
+        let call = await apiService(`/breweries/search?query=${el}`)
+        return call.data
+      })
+    )
     
-
-    return { brews: allData };
+    return { brews: [].concat.apply([], allData) };
   }
 
   handleStateChange = (event) => {
@@ -84,10 +86,10 @@ export class Index extends Component {
   render() {
     return (
       <Layout>
-        <h1>Brews</h1>
+        <img className="headImg" src="/static/obd.png" alt="Open Brewery DB" />
         <div>
           <FormGroup row>
-            <Label for="stateSelect" sm={2}>
+            <Label className="labels" for="stateSelect" sm={2}>
               State
             </Label>
             <Col sm={10}>
@@ -99,15 +101,18 @@ export class Index extends Component {
                 name="state"
                 id="stateSelect"
               >
-                <option value={"Florida"}>Florida</option>
-                <option value={"New Jersey"}>New Jersey</option>
-                <option value={"Rhode Island"}>Rhode Island</option>
+                {states.map((el, i) => {
+                  return <option 
+                    key={i}
+                    value={el}>{el}
+                  </option>
+                })}
               </Input>
             </Col>
           </FormGroup>
 
           <FormGroup row>
-            <Label for="typeSelect" sm={2}>
+            <Label for="typeSelect" className="labels" sm={2}>
               Type
             </Label>
             <Col sm={10}>
@@ -143,7 +148,7 @@ export class Index extends Component {
             return (
                 
                     <Card 
-                      key={value.id}
+                      key={index}
                       body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
                       <CardTitle>{value.name}</CardTitle>
                       <CardSubtitle>{value.city}, {value.state}</CardSubtitle>
