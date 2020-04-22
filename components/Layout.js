@@ -35,7 +35,7 @@ export default ({ children, title }) => (
         justify-content:space-around;
         padding: 1em;
         font-size: 1.2 rem;
-        background: #7e3740;
+        background: rgb(56, 54, 54);
       }
 
       header a {

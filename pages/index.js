@@ -5,12 +5,15 @@ import apiService from "../lib/apiService";
 import { Col, FormGroup, Label, Input, Card, CardTitle, CardColumns,CardSubtitle } from "reactstrap";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Brewery from '../components/Brewery';
-const states = ['Rhode Island', 'Florida', 'New Jersey', 'New York']
+
+const states = process.env.STATES.split(' ').map((st) => {
+  return st.replace('-', ' ')
+})
 export class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      state: states[3],
+      state: states[0],
       type: "micro",
       brewsList: [],
       br: {}
@@ -83,10 +86,10 @@ export class Index extends Component {
   render() {
     return (
       <Layout>
-        <h1>Open Brewery DB</h1>
+        <img className="headImg" src="/static/obd.png" alt="Open Brewery DB" />
         <div>
           <FormGroup row>
-            <Label for="stateSelect" sm={2}>
+            <Label className="labels" for="stateSelect" sm={2}>
               State
             </Label>
             <Col sm={10}>
@@ -109,7 +112,7 @@ export class Index extends Component {
           </FormGroup>
 
           <FormGroup row>
-            <Label for="typeSelect" sm={2}>
+            <Label for="typeSelect" className="labels" sm={2}>
               Type
             </Label>
             <Col sm={10}>
