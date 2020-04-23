@@ -86,6 +86,7 @@ export class Index extends Component {
   render() {
     return (
       <Layout>
+        <h4>Powered By</h4>
         <img className="headImg" src="/static/obd.png" alt="Open Brewery DB" />
         <div>
           <FormGroup row>
